@@ -91,7 +91,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     Icon(
                       Icons.search_off,
                       size: 64,
-                      color: Color.fromARGB(255, 236, 114, 114),
+                      color: Color.fromARGB(255, 168, 162, 162),
                     ),
                     SizedBox(height: 16),
                     Text(
