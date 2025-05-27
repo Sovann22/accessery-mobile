@@ -31,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      
+
       final success = await authProvider.signUp(
         _emailController.text.trim(),
         _passwordController.text,
@@ -56,9 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Account'),
-      ),
+      appBar: AppBar(title: const Text('Create Account')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -70,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 24),
                 Text(
                   'Join Us Today!',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -78,8 +76,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Create an account to start shopping',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -112,7 +112,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                    if (!RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(value)) {
                       return 'Please enter a valid email';
                     }
                     return null;
@@ -127,7 +129,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     prefixIcon: const Icon(Icons.lock_outlined),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                        _obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() {
@@ -155,7 +159,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     prefixIcon: const Icon(Icons.lock_outlined),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                        _obscureConfirmPassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() {
@@ -180,14 +186,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: authProvider.isLoading ? null : _handleRegister,
-                        child: authProvider.isLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : const Text('Create Account'),
+                        onPressed:
+                            authProvider.isLoading ? null : _handleRegister,
+                        child:
+                            authProvider.isLoading
+                                ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                                : const Text('Create Account'),
                       ),
                     );
                   },

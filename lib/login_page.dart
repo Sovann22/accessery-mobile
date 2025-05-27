@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_mobile_app/screens/home_screen.dart';
 import 'signup_page.dart';
+import 'screens/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,11 +32,13 @@ class _LoginPageState extends State<LoginPage> {
       // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
 
+      if (!mounted) return;
+
       setState(() {
         _isLoading = false;
       });
 
-      // Navigate to your existing MyHomePage after successful login
+      // Navigate to home screen after successful login
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -63,6 +65,113 @@ class _LoginPageState extends State<LoginPage> {
       return 'Password must be at least 6 characters';
     }
     return null;
+  }
+
+  void _showForgotPasswordDialog() {
+    final emailController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder:
+          (dialogContext) => AlertDialog(
+            title: const Text('Reset Password'),
+            content: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Enter your email address and we\'ll send you a link to reset your password.',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Email Address',
+                      hintText: 'Enter your email',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      if (!RegExp(
+                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                      ).hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    Navigator.of(dialogContext).pop();
+
+                    if (!mounted) return;
+
+                    // Show loading indicator
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder:
+                          (loadingContext) =>
+                              const Center(child: CircularProgressIndicator()),
+                    );
+
+                    // Simulate API call
+                    await Future.delayed(const Duration(seconds: 2));
+
+                    if (!mounted) return;
+
+                    // Close loading dialog
+                    Navigator.of(context).pop();
+
+                    // Show success message
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Password reset link sent to ${emailController.text}',
+                          ),
+                          backgroundColor: Colors.green,
+                          duration: const Duration(seconds: 4),
+                          action: SnackBarAction(
+                            label: 'OK',
+                            textColor: Colors.white,
+                            onPressed: () {
+                              if (mounted) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).hideCurrentSnackBar();
+                              }
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: const Text('Send Reset Link'),
+              ),
+            ],
+          ),
+    );
   }
 
   @override
@@ -179,14 +288,7 @@ class _LoginPageState extends State<LoginPage> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Forgot password feature coming soon!',
-                                ),
-                                backgroundColor: Colors.orange,
-                              ),
-                            );
+                            _showForgotPasswordDialog();
                           },
                           child: Text(
                             'Forgot Password?',

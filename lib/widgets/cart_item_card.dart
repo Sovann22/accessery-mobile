@@ -6,10 +6,7 @@ import '../providers/cart_provider.dart';
 class CartItemCard extends StatelessWidget {
   final CartItem cartItem;
 
-  const CartItemCard({
-    super.key,
-    required this.cartItem,
-  });
+  const CartItemCard({super.key, required this.cartItem});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +26,9 @@ class CartItemCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  cartItem.product.images.isNotEmpty ? cartItem.product.images[0] : '',
+                  cartItem.product.images.isNotEmpty
+                      ? cartItem.product.images[0]
+                      : '',
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
@@ -44,9 +43,9 @@ class CartItemCard extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(width: 12),
-            
+
             // Product Info
             Expanded(
               child: Column(
@@ -54,7 +53,7 @@ class CartItemCard extends StatelessWidget {
                 children: [
                   Text(
                     cartItem.product.name,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                     maxLines: 2,
@@ -64,7 +63,7 @@ class CartItemCard extends StatelessWidget {
                   if (cartItem.product.brand.isNotEmpty)
                     Text(
                       cartItem.product.brand,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
@@ -74,14 +73,16 @@ class CartItemCard extends StatelessWidget {
                     children: [
                       Text(
                         '\$${cartItem.product.price.toStringAsFixed(2)}',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       Text(
                         'Total: \$${cartItem.totalPrice.toStringAsFixed(2)}',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -90,9 +91,9 @@ class CartItemCard extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             const SizedBox(width: 12),
-            
+
             // Quantity Controls
             Consumer<CartProvider>(
               builder: (context, cartProvider, child) {
@@ -125,9 +126,8 @@ class CartItemCard extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
                               '${cartItem.quantity}',
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.titleSmall!
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           IconButton(
@@ -152,7 +152,9 @@ class CartItemCard extends StatelessWidget {
                         cartProvider.removeItem(cartItem.product.id);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('${cartItem.product.name} removed from cart'),
+                            content: Text(
+                              '$cartItem.product.name removed from cart',
+                            ),
                             duration: const Duration(seconds: 2),
                           ),
                         );

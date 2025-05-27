@@ -48,6 +48,113 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _showForgotPasswordDialog() {
+    final emailController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder:
+          (dialogContext) => AlertDialog(
+            title: const Text('Reset Password'),
+            content: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Enter your email address and we\'ll send you a link to reset your password.',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Email Address',
+                      hintText: 'Enter your email',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      if (!RegExp(
+                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                      ).hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    Navigator.of(dialogContext).pop();
+
+                    if (!mounted) return;
+
+                    // Show loading indicator
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder:
+                          (loadingContext) =>
+                              const Center(child: CircularProgressIndicator()),
+                    );
+
+                    // Simulate API call
+                    await Future.delayed(const Duration(seconds: 2));
+
+                    if (!mounted) return;
+
+                    // Close loading dialog
+                    Navigator.of(context).pop();
+
+                    // Show success message
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Password reset link sent to ${emailController.text}',
+                          ),
+                          backgroundColor: Colors.green,
+                          duration: const Duration(seconds: 4),
+                          action: SnackBarAction(
+                            label: 'OK',
+                            textColor: Colors.white,
+                            onPressed: () {
+                              if (mounted) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).hideCurrentSnackBar();
+                              }
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: const Text('Send Reset Link'),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
               Text(
                 'Welcome Back!',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -74,10 +181,10 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 8),
               Text(
                 'Sign in to continue shopping',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
+                  ).colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -139,9 +246,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Colors.blue.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                        border: Border.all(
+                          color: Colors.blue.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,14 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () {
-                        // TODO: Implement forgot password
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Forgot password feature coming soon!',
-                            ),
-                          ),
-                        );
+                        _showForgotPasswordDialog();
                       },
                       child: const Text('Forgot Password?'),
                     ),

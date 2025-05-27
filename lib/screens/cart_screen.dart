@@ -28,17 +28,12 @@ class CartScreen extends StatelessWidget {
                   SizedBox(height: 16),
                   Text(
                     'Your cart is empty',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
                   SizedBox(height: 8),
                   Text(
                     'Add some products to get started',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
@@ -66,7 +61,7 @@ class CartScreen extends StatelessWidget {
                   color: Theme.of(context).scaffoldBackgroundColor,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, -5),
                     ),
@@ -83,7 +78,9 @@ class CartScreen extends StatelessWidget {
                         ),
                         Text(
                           '\$${cartProvider.totalAmount.toStringAsFixed(2)}',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleLarge!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.primary,
                           ),
@@ -116,39 +113,42 @@ class CartScreen extends StatelessWidget {
   void _showCheckoutDialog(BuildContext context, CartProvider cartProvider) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Checkout'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Total: \$${cartProvider.totalAmount.toStringAsFixed(2)}'),
-            const SizedBox(height: 8),
-            Text('Items: ${cartProvider.itemCount}'),
-            const SizedBox(height: 16),
-            const Text('This is a demo checkout. In a real app, you would integrate with a payment processor.'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              cartProvider.clearCart();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Order placed successfully!'),
-                  backgroundColor: Colors.green,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Checkout'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Total: \$${cartProvider.totalAmount.toStringAsFixed(2)}'),
+                const SizedBox(height: 8),
+                Text('Items: $cartProvider.itemCount'),
+                const SizedBox(height: 16),
+                const Text(
+                  'This is a demo checkout. In a real app, you would integrate with a payment processor.',
                 ),
-              );
-            },
-            child: const Text('Place Order'),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  cartProvider.clearCart();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Order placed successfully!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+                child: const Text('Place Order'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }

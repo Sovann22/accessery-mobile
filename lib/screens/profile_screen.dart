@@ -29,7 +29,10 @@ class ProfileScreen extends StatelessWidget {
                         radius: 30,
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         child: Text(
-                          authProvider.user?.displayName?.substring(0, 1).toUpperCase() ?? 'U',
+                          authProvider.user?.displayName
+                                  .substring(0, 1)
+                                  .toUpperCase() ??
+                              'U',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -44,14 +47,17 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               authProvider.user?.displayName ?? 'User',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.titleLarge!
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                             Text(
                               authProvider.user?.email ?? '',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium!.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.6),
                               ),
                             ),
                           ],
@@ -61,18 +67,18 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Settings Section
               Text(
                 'Settings',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              
+
               // Dark Mode Toggle
               Consumer<ThemeProvider>(
                 builder: (context, themeProvider, child) {
@@ -85,13 +91,15 @@ class ProfileScreen extends StatelessWidget {
                         themeProvider.toggleTheme();
                       },
                       secondary: Icon(
-                        themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                        themeProvider.isDarkMode
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
                       ),
                     ),
                   );
                 },
               ),
-              
+
               // Notifications
               Card(
                 child: SwitchListTile(
@@ -100,24 +108,26 @@ class ProfileScreen extends StatelessWidget {
                   value: true,
                   onChanged: (value) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Notification settings updated')),
+                      const SnackBar(
+                        content: Text('Notification settings updated'),
+                      ),
                     );
                   },
                   secondary: const Icon(Icons.notifications),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Account Section
               Text(
                 'Account',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              
+
               // Order History
               Card(
                 child: ListTile(
@@ -127,12 +137,14 @@ class ProfileScreen extends StatelessWidget {
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Order history feature coming soon!')),
+                      const SnackBar(
+                        content: Text('Order history feature coming soon!'),
+                      ),
                     );
                   },
                 ),
               ),
-              
+
               // Addresses
               Card(
                 child: ListTile(
@@ -142,12 +154,14 @@ class ProfileScreen extends StatelessWidget {
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Address management coming soon!')),
+                      const SnackBar(
+                        content: Text('Address management coming soon!'),
+                      ),
                     );
                   },
                 ),
               ),
-              
+
               // Payment Methods
               Card(
                 child: ListTile(
@@ -157,23 +171,25 @@ class ProfileScreen extends StatelessWidget {
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Payment methods coming soon!')),
+                      const SnackBar(
+                        content: Text('Payment methods coming soon!'),
+                      ),
                     );
                   },
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Support Section
               Text(
                 'Support',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              
+
               // Help & Support
               Card(
                 child: ListTile(
@@ -188,7 +204,7 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
               ),
-              
+
               // About
               Card(
                 child: ListTile(
@@ -203,15 +219,17 @@ class ProfileScreen extends StatelessWidget {
                       applicationVersion: '1.0.0',
                       applicationIcon: const Icon(Icons.phone_android),
                       children: [
-                        const Text('A modern phone accessory store built with Flutter.'),
+                        const Text(
+                          'A modern phone accessory store built with Flutter.',
+                        ),
                       ],
                     );
                   },
                 ),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Logout Button
               SizedBox(
                 width: double.infinity,
@@ -234,7 +252,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 32),
             ],
           );

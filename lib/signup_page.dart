@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_mobile_app/screens/home_screen.dart';
 import 'login_page.dart';
+import 'screens/home_screen.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -63,7 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Welcome ${_nameController.text}! Account created successfully!',
+              'Welcome $_nameController.text! Account created successfully!',
             ),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 3),
@@ -71,7 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
         );
 
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
       }
     } else if (!_agreeToTerms) {

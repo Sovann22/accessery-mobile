@@ -6,10 +6,7 @@ import '../providers/cart_provider.dart';
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
 
-  const ProductDetailScreen({
-    super.key,
-    required this.product,
-  });
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -76,9 +73,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             height: 8,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: _currentImageIndex == index
-                                  ? Colors.white
-                                  : Colors.white.withOpacity(0.5),
+                              color:
+                                  _currentImageIndex == index
+                                      ? Colors.white
+                                      : Colors.white.withValues(alpha: 0.5),
                             ),
                           ),
                         ),
@@ -104,15 +102,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           children: [
                             Text(
                               widget.product.name,
-                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.headlineSmall!
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 4),
                             if (widget.product.brand.isNotEmpty)
                               Text(
                                 widget.product.brand,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium!.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -125,7 +124,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         children: [
                           Text(
                             '\$${widget.product.price.toStringAsFixed(2)}',
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            style: Theme.of(
+                              context,
+                            ).textTheme.headlineSmall!.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
@@ -140,7 +141,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '${widget.product.rating} (${widget.product.reviewCount})',
+                                  '$widget.product.rating ($widget.product.reviewCount)',
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
@@ -149,14 +150,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // Stock Status
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: widget.product.isInStock ? Colors.green : Colors.red,
+                      color:
+                          widget.product.isInStock ? Colors.green : Colors.red,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
@@ -168,13 +173,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Description
                   Text(
                     'Description',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -183,12 +188,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     widget.product.description,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  
+
                   if (widget.product.features.isNotEmpty) ...[
                     const SizedBox(height: 24),
                     Text(
                       'Features',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -216,7 +221,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ),
                   ],
-                  
+
                   const SizedBox(height: 100), // Space for bottom button
                 ],
               ),
@@ -230,7 +235,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -5),
             ),
@@ -239,7 +244,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Consumer<CartProvider>(
           builder: (context, cartProvider, child) {
             final isInCart = cartProvider.isInCart(widget.product.id);
-            
+
             return Row(
               children: [
                 if (isInCart) ...[
@@ -248,9 +253,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            final currentQuantity = cartProvider.getQuantity(widget.product.id);
+                            final currentQuantity = cartProvider.getQuantity(
+                              widget.product.id,
+                            );
                             if (currentQuantity > 1) {
-                              cartProvider.updateQuantity(widget.product.id, currentQuantity - 1);
+                              cartProvider.updateQuantity(
+                                widget.product.id,
+                                currentQuantity - 1,
+                              );
                             } else {
                               cartProvider.removeItem(widget.product.id);
                             }
@@ -259,9 +269,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         Text(
                           '${cartProvider.getQuantity(widget.product.id)}',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
                         ),
                         IconButton(
                           onPressed: () {
@@ -277,17 +286,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Expanded(
                   flex: isInCart ? 2 : 1,
                   child: ElevatedButton.icon(
-                    onPressed: widget.product.isInStock
-                        ? () {
-                            cartProvider.addItem(widget.product);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${widget.product.name} added to cart'),
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        : null,
+                    onPressed:
+                        widget.product.isInStock
+                            ? () {
+                              cartProvider.addItem(widget.product);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '$widget.product.name added to cart',
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            }
+                            : null,
                     icon: const Icon(Icons.shopping_cart),
                     label: Text(isInCart ? 'Update Cart' : 'Add to Cart'),
                     style: ElevatedButton.styleFrom(

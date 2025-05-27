@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Hello!',
                             style: Theme.of(
                               context,
-                            ).textTheme.headlineSmall?.copyWith(
+                            ).textTheme.headlineSmall!.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -84,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context, authProvider, child) {
                               return Text(
                                 authProvider.user?.displayName ?? 'Welcome',
-                                style: Theme.of(context).textTheme.bodyLarge
-                                    ?.copyWith(color: Colors.white70),
+                                style: Theme.of(context).textTheme.bodyLarge!
+                                    .copyWith(color: Colors.white70),
                               );
                             },
                           ),
@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       minHeight: 16,
                                     ),
                                     child: Text(
-                                      '${cartProvider.itemCount}',
+                                      '$cartProvider.itemCount',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text(
                   'Categories',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -223,8 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       'Featured Products',
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.headlineSmall!
+                          .copyWith(fontWeight: FontWeight.bold),
                     ),
                     TextButton(
                       onPressed: () {

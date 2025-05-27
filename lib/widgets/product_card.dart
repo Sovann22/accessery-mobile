@@ -3,14 +3,12 @@ import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
 import '../screens/product_detail_screen.dart';
+import '../widgets/cached_image.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
 
-  const ProductCard({
-    super.key,
-    required this.product,
-  });
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -34,28 +32,18 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Container(
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                    ),
-                    child: Image.network(
-                      product.images.isNotEmpty ? product.images[0] : '',
+                    decoration: BoxDecoration(color: Colors.grey[100]),
+                    child: CachedImage(
+                      imageUrl:
+                          product.images.isNotEmpty ? product.images[0] : '',
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[200],
-                          child: const Icon(
-                            Icons.image_not_supported,
-                            size: 48,
-                            color: Colors.grey,
-                          ),
-                        );
-                      },
+                      width: double.infinity,
                     ),
                   ),
                   if (!product.isInStock)
                     Positioned.fill(
                       child: Container(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withValues(alpha: 0.5),
                         child: const Center(
                           child: Text(
                             'OUT OF STOCK',
@@ -79,34 +67,47 @@ class ProductCard extends StatelessWidget {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               ),
                             ],
                           ),
                           child: IconButton(
-                            onPressed: product.isInStock
-                                ? () {
-                                    if (isInCart) {
-                                      cartProvider.removeItem(product.id);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('${product.name} removed from cart'),
-                                          duration: const Duration(seconds: 1),
-                                        ),
-                                      );
-                                    } else {
-                                      cartProvider.addItem(product);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('${product.name} added to cart'),
-                                          duration: const Duration(seconds: 1),
-                                        ),
-                                      );
+                            onPressed:
+                                product.isInStock
+                                    ? () {
+                                      if (isInCart) {
+                                        cartProvider.removeItem(product.id);
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              '$product.name removed from cart',
+                                            ),
+                                            duration: const Duration(
+                                              seconds: 1,
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        cartProvider.addItem(product);
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              '$product.name added to cart',
+                                            ),
+                                            duration: const Duration(
+                                              seconds: 1,
+                                            ),
+                                          ),
+                                        );
+                                      }
                                     }
-                                  }
-                                : null,
+                                    : null,
                             icon: Icon(
                               isInCart ? Icons.check : Icons.add_shopping_cart,
                               color: isInCart ? Colors.white : Colors.grey[600],
@@ -120,7 +121,7 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Product Info
             Expanded(
               flex: 2,
@@ -131,7 +132,7 @@ class ProductCard extends StatelessWidget {
                   children: [
                     Text(
                       product.name,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 2,
@@ -141,7 +142,7 @@ class ProductCard extends StatelessWidget {
                     if (product.brand.isNotEmpty)
                       Text(
                         product.brand,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
@@ -151,7 +152,9 @@ class ProductCard extends StatelessWidget {
                       children: [
                         Text(
                           '\$${product.price.toStringAsFixed(2)}',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.primary,
                           ),
